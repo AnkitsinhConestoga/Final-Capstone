@@ -30,10 +30,10 @@ const CustomImageCheckbox: React.FC<CustomImageCheckboxProps> = ({ checkedImage,
             </TouchableOpacity>
             <Text style={StyleView.b8}>
                 <Text style={StyleView.b8}>{StringKey.term_start_Text}</Text>
-                <TouchableOpacity onPress={()=>{navigation.navigate}}><Text style={{color:Colors.colorfb}}>{StringKey.tos+' '} </Text></TouchableOpacity>
+                <TouchableOpacity onPress={()=>{}}><Text style={{color:Colors.colorfb}}>{StringKey.tos+' '} </Text></TouchableOpacity>
                 
                 <Text style={StyleView.b8}>{StringKey.and}</Text>
-                <TouchableOpacity onPress={()=>{}}><Text style={{color:Colors.colorfb}}>{" "+StringKey.pri_policy+"."}</Text></TouchableOpacity>
+                <TouchableOpacity onPress={()=>{navigation.navigate("TextViewerScreen",{label:StringKey.pri_policy,textContent:StringKey.pri_policy_content});}}><Text style={{color:Colors.colorfb}}>{" "+StringKey.pri_policy+"."}</Text></TouchableOpacity>
                 
             </Text>
         </View>
