@@ -1,13 +1,12 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import Colors from './Colors';
-const windowW= Dimensions.get('window').width
-const windowH = Dimensions.get('window').height
+const windowW = Dimensions.get('window').width;
+const windowH = Dimensions.get('window').height;
 
 const StyleView = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-
   },
 
   logo: {
@@ -33,8 +32,8 @@ const StyleView = StyleSheet.create({
   t3_sub: {
     fontSize: 14,
     lineHeight: 19,
-    fontWeight: "500",
-    fontFamily: "Poppins-Medium",
+    fontWeight: '500',
+    fontFamily: 'Poppins-Medium',
     color: Colors.colorfb,
   },
   t4: {
@@ -48,8 +47,7 @@ const StyleView = StyleSheet.create({
 
   placeHolderStyle: {
     // plac:Colors.greyd0
-    color:Colors.textColor41
-    
+    color: Colors.textColor41,
   },
   profileImage: {
     width: 150,
@@ -59,15 +57,14 @@ const StyleView = StyleSheet.create({
   cameraIcon: {
     position: 'absolute',
     bottom: 5,
-    width:40,
-    height:40,
+    width: 40,
+    height: 40,
     right: 5,
     backgroundColor: Colors.colorfb,
     borderRadius: 15, // Makes the icon button circular
     padding: 5,
   },
-  rowContainer:{
-
+  rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -75,57 +72,56 @@ const StyleView = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderStyle: "solid",
-    width: windowW*0.95,
-    alignSelf: "center",
+    borderStyle: 'solid',
+    width: windowW * 0.95,
+    alignSelf: 'center',
     borderColor: Colors.greyb8,
     borderRadius: 8,
   },
-  centerElement:{
-    width: windowW*0.95,
-    alignSelf: "center",
+  centerElement: {
+    width: windowW * 0.95,
+    alignSelf: 'center',
   },
   iconStyle: {
     width: 24,
     height: 24,
-    overflow: "hidden",
-    marginEnd:10
+    overflow: 'hidden',
+    marginEnd: 10,
   },
   greyBorder: {
     borderRadius: 8,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Colors.greyb8,
     borderWidth: 1,
-    width: windowW*0.95,
-    alignSelf: "center",
+    width: windowW * 0.95,
+    alignSelf: 'center',
   },
   iconContainer: {
     padding: 5,
   },
   lineStyle: {
     backgroundColor: Colors.greyb8,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Colors.greyb8,
     borderTopWidth: 1,
     flex: 1,
     margin: 10,
     width: windowW,
-    height: 1
+    height: 1,
   },
-  verticalLine:{
+  verticalLine: {
     height: '60%',
     width: 1,
-    marginRight:'2%',
+    marginRight: '2%',
 
     backgroundColor: '#909090',
   },
   input: {
     flex: 1,
-    color: Colors.black
+    color: Colors.black,
   },
 
   b1: {
-
     color: Colors.white,
     fontSize: 16,
     fontFamily: 'Poppins-Medium',
@@ -136,7 +132,6 @@ const StyleView = StyleSheet.create({
     fontWeight: '500',
   },
   b2: {
-
     color: Colors.colorf5,
     fontSize: 16,
 
@@ -148,30 +143,28 @@ const StyleView = StyleSheet.create({
   },
   b8: {
     color: Colors.greyb8,
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: 16,
-    fontFamily: "Poppins-Medium",
+    fontFamily: 'Poppins-Medium',
   },
 
   B1: {
     borderRadius: 8,
     backgroundColor: Colors.colorf5,
-    width: "90%",
+    width: '90%',
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: 'center'
-
-
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   lineView: {
-    backgroundColor: "#b8b8b8",
-    borderStyle: "solid",
-    borderColor: "#b8b8b8",
+    backgroundColor: '#b8b8b8',
+    borderStyle: 'solid',
+    borderColor: '#b8b8b8',
     borderTopWidth: 1,
     flex: 1,
-    width: "100%",
-    height: 1
+    width: '100%',
+    height: 1,
   },
   B2: {
     backgroundColor: Colors.white,
@@ -186,8 +179,6 @@ const StyleView = StyleSheet.create({
     alignSelf: 'center',
     alignContent: 'center',
   },
-
-
 });
 
 export default StyleView;
