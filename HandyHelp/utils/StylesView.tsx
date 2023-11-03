@@ -1,6 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import Colors from './Colors';
-
+const windowW= Dimensions.get('window').width
+const windowH = Dimensions.get('window').height
 
 const StyleView = StyleSheet.create({
   container: {
@@ -18,7 +19,7 @@ const StyleView = StyleSheet.create({
   t1: {
     color: Colors.textColor41,
     fontSize: 24,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: 'Poppins-Bold',
     fontWeight: '500',
   },
   t2: {
@@ -47,6 +48,23 @@ const StyleView = StyleSheet.create({
 
   placeHolderStyle: {
     // plac:Colors.greyd0
+    color:Colors.textColor41
+    
+  },
+  profileImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 75, // Makes the image circular
+  },
+  cameraIcon: {
+    position: 'absolute',
+    bottom: 5,
+    width:40,
+    height:40,
+    right: 5,
+    backgroundColor: Colors.colorfb,
+    borderRadius: 15, // Makes the icon button circular
+    padding: 5,
   },
   rowContainer:{
 
@@ -58,13 +76,13 @@ const StyleView = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderStyle: "solid",
-    width: "95%",
+    width: windowW*0.95,
     alignSelf: "center",
     borderColor: Colors.greyb8,
     borderRadius: 8,
   },
   centerElement:{
-    width: "95%",
+    width: windowW*0.95,
     alignSelf: "center",
   },
   iconStyle: {
@@ -78,7 +96,7 @@ const StyleView = StyleSheet.create({
     borderStyle: "solid",
     borderColor: Colors.greyb8,
     borderWidth: 1,
-    width: "95%",
+    width: windowW*0.95,
     alignSelf: "center",
   },
   iconContainer: {
@@ -91,8 +109,15 @@ const StyleView = StyleSheet.create({
     borderTopWidth: 1,
     flex: 1,
     margin: 10,
-    width: "100%",
+    width: windowW,
     height: 1
+  },
+  verticalLine:{
+    height: '60%',
+    width: 1,
+    marginRight:'2%',
+
+    backgroundColor: '#909090',
   },
   input: {
     flex: 1,

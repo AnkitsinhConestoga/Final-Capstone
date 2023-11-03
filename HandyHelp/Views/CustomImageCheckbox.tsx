@@ -28,12 +28,14 @@ const CustomImageCheckbox: React.FC<CustomImageCheckboxProps> = ({ checkedImage,
             <TouchableOpacity onPress={toggleCheckbox}>
                 <Image source={isChecked ? checkedImage : uncheckedImage} style={StyleView.iconStyle} />
             </TouchableOpacity>
-            <Text style={StyleView.b8}>
-                <Text style={StyleView.b8}>{StringKey.term_start_Text}</Text>
-                <TouchableOpacity onPress={()=>{}}><Text style={{color:Colors.colorfb}}>{StringKey.tos+' '} </Text></TouchableOpacity>
+     
+
+            <Text style={[StyleView.b8,{width:'90%'}]}>
+                <Text >{StringKey.term_start_Text}</Text>
+                <Text onPress={()=>{navigation.navigate("TextViewerScreen",{label:StringKey.tos,textContent:StringKey.tos_content});}} style={[{color:Colors.colorfb, }]}>{StringKey.tos+' '} </Text>
                 
-                <Text style={StyleView.b8}>{StringKey.and}</Text>
-                <TouchableOpacity onPress={()=>{navigation.navigate("TextViewerScreen",{label:StringKey.pri_policy,textContent:StringKey.pri_policy_content});}}><Text style={{color:Colors.colorfb}}>{" "+StringKey.pri_policy+"."}</Text></TouchableOpacity>
+                <Text >{StringKey.and}</Text>
+                <Text onPress={()=>{navigation.navigate("TextViewerScreen",{label:StringKey.pri_policy,textContent:StringKey.pri_policy_content});}} style={[{color:Colors.colorfb, alignSelf: 'center' }]}>{" "+StringKey.pri_policy+"."}</Text>
                 
             </Text>
         </View>

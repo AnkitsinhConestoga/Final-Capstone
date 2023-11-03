@@ -13,7 +13,7 @@ type MyComponentProps = {
 const WelcomeScreen: React.FC<MyComponentProps> = ({ navigation }) => {
   return (
     <View style={StyleView.container}>
-      <Image source={require('../images/app_logo.png')} style={[StyleView.logo,{marginTop:50}]} />
+      <Image source={require('../assets/images/app_logo.png')} style={[StyleView.logo,{marginTop:50}]} />
       <Text style={[StyleView.t1,{marginTop:25,textAlign:'center'}]}>{StringKey.welcome}</Text>
       <Text style={[StyleView.t2,{marginTop:12,textAlign:'center'}]}>{StringKey.welcomeScreenSubText1}</Text>
       <CustomButton text={StringKey.createAccount} textTheme={StyleView.b1} btnTheme={[StyleView.B1,{marginTop:'42%'}]} btnClick={

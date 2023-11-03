@@ -25,6 +25,9 @@ import LoginScreen from './Views/Login/LoginScreen';
 import StyleView from './utils/StylesView';
 import RegisterScreen from './Views/Register/RegisterScreen';
 import TextViewerScreen from './utils/TextViewerScreen';
+import PhoneVerification from './Views/PhoneVerification';
+import PasswordVerification from './Views/PasswordVerification';
+import ProfileReg from './Views/RegisterProfile';
 
 
 const Stack = createStackNavigator();
@@ -45,6 +48,9 @@ const App = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="TextViewerScreen" component={TextViewerScreen} />
+        <Stack.Screen name="PhoneVerification" component={PhoneVerification} />
+        <Stack.Screen name="PasswordVerification" component={PasswordVerification} />
+        <Stack.Screen name="ProfileReg" component={ProfileReg} />
         
       </Stack.Navigator>
   </View></NavigationContainer>

@@ -5,7 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import StyleView from './StylesView';
 import StringKey from './StringsFile';
 import BackView from '../Views/BackButtonView';
-import HTML from 'react-native-render-html';
+import { WebView } from 'react-native-webview';
 
 type RootStackParamList = {
   MyScreen: undefined;
@@ -24,18 +24,39 @@ type TextViewerScreenProps = {
   navigation: TextViewerScreenNavigationProp;
 };
 
-const TextViewerScreen: React.FC<TextViewerScreenProps> = ({ route,navigation }) => {
+
+
+
+const TextViewerScreen: React.FC<TextViewerScreenProps> = ({ route, navigation }) => {
   const { label, textContent } = route.params;
-  const windowWidth = useWindowDimensions().width;
+  const isURL = /^(https?|ftp):\/\//.test(textContent);
 
 
-  return (
-    <View style={StyleView.container}>
-    <BackView text={StringKey.Back} title={label}  btnClick={() => navigation.goBack()} />
+  if ( isURL ) {
+    return (
+      <View style={StyleView.container}>
+        <BackView text={StringKey.Back} title={label} btnClick={() => navigation.goBack()} />
+        <WebView
+          source={{ uri: textContent }}
+          style={[StyleView.container, { alignSelf: 'center', width: "95%" }]}
+        />
+      </View>
+    );
+
+  } else {
+    let finalHtml ='<html><head><meta charset="utf-8"><meta name="viewport" content="initial-scale=1, width=device-width"><link rel="stylesheet" href="./index.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" /></head><body>' +  textContent  + '</body></html>';
     
-    <HTML contentWidth={windowWidth} source={{ html: textContent }} />
-  </View>
-  );
+    return (
+      <View style={StyleView.container}>
+        <BackView text={StringKey.Back} title={label} btnClick={() => navigation.goBack()} />
+        <WebView
+        
+          source={{ html: finalHtml}}
+          style={[StyleView.container, { alignSelf: 'center', width: "95%" }]}
+        />
+      </View>
+    );
+  }
 };
 
 

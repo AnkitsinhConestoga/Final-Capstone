@@ -26,28 +26,28 @@ const LoginScreen: React.FC<MyComponentProps> = ({ navigation }) => {
             <View >
                 <Text style={[StyleView.t1, { alignSelf: "flex-start", marginStart: 10, marginTop: '10%', alignItems: 'center' }]}>{StringKey.SignIn_Heading}</Text>
                 <View style={[StyleView.greyBorder, { marginTop: '10%' }]}>
-                    <TextInput style={StyleView.placeHolderStyle} placeholder={StringKey.email_phone} ></TextInput>
+                    <TextInput style={StyleView.placeHolderStyle} placeholderTextColor={Colors.greyd0} placeholder={StringKey.email_phone} ></TextInput>
                 </View>
                 <View style={[{ marginTop: '5%' }]}>
-                    <PasswordInput
+                    <PasswordInput 
                         value={password}
                         onChangeText={(text) => setPassword(text)}
                         placeholder={StringKey.enter_pwd}
                     />
                 </View>
                 <Text style={[StyleView.t3_sub, { textAlign: 'right', padding: '5%', }]} >{StringKey.forgotpwd}</Text>
-                <CustomButton text={StringKey.Log_in} textTheme={StyleView.b1} btnTheme={[StyleView.B1, { marginTop: '10%' }]} btnClick={() => { }} ></CustomButton>
+                <CustomButton text={StringKey.Log_in} textTheme={StyleView.b1} btnTheme={[StyleView.B1, { marginTop: '10%' }]} btnClick={() => {navigation.navigate('PhoneVerification'); }} ></CustomButton>
                 <View style={{ flexDirection: "row", alignItems: "center", marginTop: '5%' }}><View style={StyleView.lineStyle} /><Text style={StyleView.b8}>{StringKey.or}</Text><View style={StyleView.lineStyle} />
                 </View>
 
                 <View style={{ flexDirection: "column" }} >
-                    <SocialMediaButton socialMediaName={StringKey.login_google} icon={require('../../images/gmail.png')} onClick={() => {
+                    <SocialMediaButton socialMediaName={StringKey.login_google} icon={require('../../assets/images/gmail.png')} onClick={() => {
 
                     }} />
-                    <SocialMediaButton socialMediaName={StringKey.login_google} icon={require('../../images/facebook.png')} onClick={() => {
+                    <SocialMediaButton socialMediaName={StringKey.login_facebook} icon={require('../../assets/images/facebook.png')} onClick={() => {
 
                     }} />
-                    <SocialMediaButton socialMediaName={StringKey.login_google} icon={require('../../images/apple.png')} onClick={() => {
+                    <SocialMediaButton socialMediaName={StringKey.login_apple} icon={require('../../assets/images/apple.png')} onClick={() => {
 
                     }} />
 

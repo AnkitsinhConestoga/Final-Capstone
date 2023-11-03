@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign';
 import Colors from '../utils/Colors';
-import { Pressable } from 'react-native';
+import { View, Pressable, Text } from 'react-native';
+
 
 
 
@@ -13,7 +13,7 @@ const BackView: React.FC<{ text: string, title?: string, rightTitle?: string, bt
     <Pressable onPress={btnClick}>
       <Icon style={{ padding: 5 }} name="left" size={24} color={Colors.blackIcon} />
     </Pressable>
-    <Text style={{ paddingTop: 5, fontFamily: 'Poppins' }}>{text}</Text>
+    <Text style={{  fontFamily: 'Poppins' }}>{text}</Text>
   </View>
   <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
     {title && <Text style={{ fontFamily: 'Poppins', fontSize: 18, fontWeight: 'bold', color: Colors.textColor41, textAlign: 'center' }}>{title.trim() == "" ? "" : title}</Text>}
