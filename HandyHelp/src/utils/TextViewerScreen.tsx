@@ -1,19 +1,16 @@
 import React from 'react';
-import {View, Text, useWindowDimensions} from 'react-native';
-import {RouteProp, useRoute} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { View, Text, useWindowDimensions } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import StyleView from './StylesView';
 import StringKey from './StringsFile';
 import BackView from '../Views/BackButtonView';
-import {WebView} from 'react-native-webview';
+import { WebView } from 'react-native-webview';
+import { RootStackParamList } from './RootStackParamList';
+import CustomButton from '../Views/CustomButton';
+import Colors from './Colors';
 
-type RootStackParamList = {
-  MyScreen: undefined;
-  TextViewerScreen: {
-    label: string;
-    textContent: string;
-  };
-};
+
 
 type TextViewerScreenRouteProp = RouteProp<
   RootStackParamList,
@@ -34,7 +31,7 @@ const TextViewerScreen: React.FC<TextViewerScreenProps> = ({
   route,
   navigation,
 }) => {
-  const {label, textContent} = route.params;
+  const { label, textContent, deleteButton,deleteBtnClick } = route.params;
   const isURL = /^(https?|ftp):\/\//.test(textContent);
 
   if (isURL) {
@@ -46,9 +43,15 @@ const TextViewerScreen: React.FC<TextViewerScreenProps> = ({
           btnClick={() => navigation.goBack()}
         />
         <WebView
-          source={{uri: textContent}}
-          style={[StyleView.container, {alignSelf: 'center', width: '95%'}]}
+          source={{ uri: textContent }}
+          style={[StyleView.container, { alignSelf: 'center', width: '95%' }]}
         />
+        {deleteBtnClick &&  <CustomButton
+          text={StringKey.delete_account}
+          textTheme={StyleView.b1}
+          btnTheme={[StyleView.B1, { marginTop: 18,color:Colors.redCancel }]}
+          btnClick={deleteBtnClick}
+        />}
       </View>
     );
   } else {
@@ -65,9 +68,19 @@ const TextViewerScreen: React.FC<TextViewerScreenProps> = ({
           btnClick={() => navigation.goBack()}
         />
         <WebView
-          source={{html: finalHtml}}
-          style={[StyleView.container, {alignSelf: 'center', width: '95%'}]}
+          source={{ html: finalHtml }}
+          style={[StyleView.container, { alignSelf: 'center', width: '95%' }]}
         />
+
+        {deleteBtnClick &&  <CustomButton
+          text={StringKey.delete_account}
+          textTheme={StyleView.b1}
+          btnTheme={[StyleView.B1, { marginTop: 18,color:Colors.redCancel }]}
+          btnClick={deleteBtnClick}
+        />}
+
+       
+
       </View>
     );
   }

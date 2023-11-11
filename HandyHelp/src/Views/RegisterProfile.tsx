@@ -15,7 +15,6 @@ import BackView from './BackButtonView';
 import Colors from '../utils/Colors';
 import CustomButton from './CustomButton';
 import Picker from 'react-native-picker-select';
-import ImagePicker from 'react-native-image-picker';
 
 type ProfileRegProp = {
   navigation: any;
@@ -154,7 +153,7 @@ const ProfileReg: React.FC<ProfileRegProp> = ({navigation}) => {
             textTheme={StyleView.b1}
             btnTheme={[StyleView.B1, {flex: 1, margin: 8}]}
             btnClick={() => {
-              // navigation.navigate('Login');
+              navigation.navigate('HomeScreen');
             }}
           />
         </View>

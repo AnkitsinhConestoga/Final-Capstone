@@ -1,13 +1,10 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import Colors from './Colors';
 const windowW = Dimensions.get('window').width;
 const windowH = Dimensions.get('window').height;
 
 const StyleView = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
+
 
   logo: {
     width: 300,
@@ -43,6 +40,22 @@ const StyleView = StyleSheet.create({
     fontWeight: '500',
     alignSelf: 'center',
     lineHeight: 24,
+  },
+  sub_12_text: {
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: "500",
+    fontFamily: "Poppins-Medium",
+    color: Colors.greyb8,
+    textAlign: "left"
+  },
+  chatbg: {
+    borderTopRightRadius: 16,
+    borderBottomRightRadius: 16,
+    borderBottomLeftRadius: 16,
+    backgroundColor: Colors.greye8,
+
+
   },
 
   placeHolderStyle: {
@@ -157,6 +170,44 @@ const StyleView = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
+  tabHeaderStyle: {
+    fontSize: 24,
+    lineHeight: 30,
+    fontWeight: "600",
+    fontFamily: "Poppins-SemiBold",
+    color: Colors.grey5a,
+    textAlign: "left"
+  },
+  sliderImage: {
+    width: Dimensions.get('window').width,
+    height: 210,
+    resizeMode: 'cover',
+  },
+  dialog: {
+    height:'40%',
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 16,
+  },
+  dialogcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  addressText: {
+    
+    width:'100%',
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: "500",
+    fontFamily: "Poppins-Medium",
+    color: Colors.addressColor,
+    textAlign: "center",
+
+  },
+
   lineView: {
     backgroundColor: '#b8b8b8',
     borderStyle: 'solid',
@@ -178,6 +229,49 @@ const StyleView = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     alignContent: 'center',
+  },
+
+  circularborderStyle: {
+    borderRadius: 8,
+    borderColor: Colors.colorfb,
+    borderStyle: "solid",
+    borderWidth: 1
+  },
+  CardStyle: {
+    height: 170,
+    backgroundColor: Colors.cardBg,
+    width: '90%',
+    marginVertical: 10,
+    alignSelf: 'center'
+
+  },
+  textContainer: {
+    flex: 1,
+    padding: 12,
+    height: 50,
+
+  },
+  text: {
+    textAlign: 'center',
+    color: Colors.grey5a,
+    fontWeight: "500",
+    fontFamily: "Poppins-Medium"
+  },
+  selectText: {
+    textAlign: 'center',
+    color: Colors.white
+  },
+  selectedText: {
+    backgroundColor: Colors.colorfb,
+    borderRadius: 8,
+    color: Colors.white // Change the background color for selected text
+  },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    width: "100%",
+    height: "100%",
+    overflow: 'hidden'
   },
 });
 

@@ -28,6 +28,15 @@ import TextViewerScreen from './utils/TextViewerScreen';
 import PhoneVerification from './Views/PhoneVerification';
 import PasswordVerification from './Views/PasswordVerification';
 import ProfileReg from './Views/RegisterProfile';
+import HomeScreen from './Views/Home/HomeScreen';
+import PostDetailScreen from './Views/PostDetails/PostDetailScreen';
+import FullScreenImageViewer from './utils/FullScreenImageViewer';
+import PostOfferItemView from './Views/PostDetails/PostOfferList';
+import UpdateProfile from './Views/Profile/UpdateProfile';
+import PwdChange from './Views/Profile/PasswordChange';
+import LogoutScreen from './Views/Profile/LogoutScreen';
+import ComplainScreen from './Views/ComplainScreen';
+import ContactUsScreen from './Views/ContactusScreen';
 
 
 const Stack = createStackNavigator();
@@ -51,6 +60,15 @@ const App = () => {
         <Stack.Screen name="PhoneVerification" component={PhoneVerification} />
         <Stack.Screen name="PasswordVerification" component={PasswordVerification} />
         <Stack.Screen name="ProfileReg" component={ProfileReg} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="PostDetailScreen" component={PostDetailScreen} />
+        <Stack.Screen name="FullScreenImage" component={FullScreenImageViewer} />
+        <Stack.Screen name="PostOfferScreen" component={PostOfferItemView} />
+        <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+        <Stack.Screen name="UpdatePassword" component={PwdChange} />
+        <Stack.Screen name="LogoutScreen" component={LogoutScreen} />
+        <Stack.Screen name="ComplainScreen" component={ComplainScreen} />
+        <Stack.Screen name="ContactUsScreen" component={ContactUsScreen} />
         
       </Stack.Navigator>
   </View></NavigationContainer>
