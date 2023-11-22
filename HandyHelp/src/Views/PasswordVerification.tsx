@@ -7,6 +7,9 @@ import Colors from "../utils/Colors";
 import CustomButton from "./CustomButton";
 import OTPView from "../utils/OTPView";
 import PasswordInput from "./PasswordInput";
+import Dialog from "../utils/Dialog";
+import FirebaseAuthManager from "../utils/FirebaseAuthManager";
+import { USER } from "../Model/UserModel";
 
 
 type PasswordVerificationProp = {
@@ -17,6 +20,53 @@ const PasswordVerification: React.FC<PasswordVerificationProp> = ({ navigation }
 
     const [password, setPassword] = useState('');
     const [repassword, resetPassword] = useState('');
+    const [isDialogVisible, setIsDialogVisible] = useState(false);
+    const [errorMessage, seterrorMessage] = React.useState('');
+
+    const openDialog = () => {
+        console.log("Dialog open");
+        setIsDialogVisible(true);
+    };
+
+    const closeDialog = () => {
+        // Handle checkbox state change
+        console.log(`Error shown: `);
+        setIsDialogVisible(false);
+    };
+
+
+    const PwdVerify = () =>{
+
+        if (password !== repassword) {
+            seterrorMessage(StringKey.error_pwd);
+            openDialog();
+            return false;
+          }
+        
+          // Check if the password contains at least one number
+          if (!/\d/.test(password)) {
+            seterrorMessage(StringKey.error_pwd);
+            openDialog();
+            return false;
+          }
+        
+          // Check if the password contains at least one special character
+          if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            seterrorMessage(StringKey.error_pwd);
+            openDialog();
+            return false;
+          }
+
+          FirebaseAuthManager.signIn(USER.email,password).then(reason =>{
+            navigation.navigate('ProfileReg');
+          }).catch(error =>{
+            console.log(error.message);
+            seterrorMessage(error.message);
+            openDialog();
+          });
+
+        
+    }
 
     return (
         <SafeAreaView style={StyleView.container}>
@@ -45,9 +95,15 @@ const PasswordVerification: React.FC<PasswordVerificationProp> = ({ navigation }
                     {StringKey.pwd_sub}
                 </Text>
                 <View style={{flex:1}}/>
-                <CustomButton text={StringKey.register} textTheme={StyleView.b1} btnTheme={[StyleView.B1, {marginBottom:"20%" }]} btnClick={() => {navigation.navigate('ProfileReg'); }} ></CustomButton>
+                <CustomButton text={StringKey.register} textTheme={StyleView.b1} btnTheme={[StyleView.B1, {marginBottom:"20%" }]} btnClick={PwdVerify} ></CustomButton>
             
             </View>
+            <Dialog
+                    visible={isDialogVisible}
+                    title={StringKey.error}
+                    content={errorMessage}
+                    onClose={closeDialog}
+                />
     
         </SafeAreaView>
     );

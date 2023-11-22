@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StatusBar, Image, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import StyleView from "../../utils/StylesView";
 import CustomButton from "../CustomButton";
 import StringKey from '../../utils/StringsFile';
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../../utils/Colors";
+import { USER } from "../../Model/UserModel";
+import FirebaseAuthManager from "../../utils/FirebaseAuthManager";
+import FirebaseDatabaseManager from "../../utils/FirebaseDatabaseManager";
 
 
 
@@ -14,7 +17,22 @@ type SettingScreenProps = {
 
 const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
 
-    const [profileImage, setProfileImage] = useState(null);
+
+    useEffect(() => {
+        // Listen for changes in user authentication state
+        const unsubscribe = FirebaseAuthManager.onAuthStateChanged(async (user) => {
+    
+          if (user) {
+            await FirebaseDatabaseManager.getUserData(user.uid);
+          } 
+        });
+    
+        // Unsubscribe when the component unmounts
+        return () => unsubscribe();
+      }, []);
+
+
+    const [profileImage, setProfileImage] = useState(USER.profileUrl||null);
     const selectImage = () => {
         const options = {
             title: 'Select Profile Picture',
@@ -34,15 +52,15 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
                     <TouchableOpacity onPress={selectImage}>
                         <Image
                             source={
-                                profileImage ||
+                                profileImage ? {uri:profileImage}: 
                                 require('../../assets/images/default-profile-image.png')
                             } // Provide a default profile image
                             style={StyleView.profileImage}
                         />
                     </TouchableOpacity>
                 </View>
-                <Text style={[StyleView.t1, { textAlign: 'center', marginTop: 10 }]}>Jaydeep Raval</Text>
-                <Text style={[StyleView.t1, { textAlign: 'center', fontSize: 14, marginTop: 5 }]}>jp@gmail.com</Text>
+                <Text style={[StyleView.t1, { textAlign: 'center', marginTop: 10 }]}>{USER.name}</Text>
+                <Text style={[StyleView.t1, { textAlign: 'center', fontSize: 14, marginTop: 5 }]}>{USER.email}</Text>
                 <TouchableOpacity onPress={()=>{
                     navigation.navigate('UpdateProfile');
                 }}>

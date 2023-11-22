@@ -24,10 +24,10 @@ type TextViewerScreenNavigationProp = StackNavigationProp<
 
 type TextViewerScreenProps = {
   route: TextViewerScreenRouteProp;
-  navigation: TextViewerScreenNavigationProp;
+  navigation: TextViewerScreenNavigationProp ;
 };
 
-const TextViewerScreen: React.FC<TextViewerScreenProps> = ({
+const TextViewerScreen: React.FC<TextViewerScreenProps > = ({
   route,
   navigation,
 }) => {

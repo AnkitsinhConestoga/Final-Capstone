@@ -184,7 +184,7 @@ const StyleView = StyleSheet.create({
     resizeMode: 'cover',
   },
   dialog: {
-    height:'40%',
+
     width: '80%',
     backgroundColor: 'white',
     borderRadius: 10,
@@ -197,8 +197,8 @@ const StyleView = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   addressText: {
-    
-    width:'100%',
+
+    width: '100%',
     fontSize: 14,
     lineHeight: 18,
     fontWeight: "500",
@@ -206,6 +206,17 @@ const StyleView = StyleSheet.create({
     color: Colors.addressColor,
     textAlign: "center",
 
+  },
+  preloader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.white,
+    opacity: 0.5
   },
 
   lineView: {
@@ -265,6 +276,18 @@ const StyleView = StyleSheet.create({
     backgroundColor: Colors.colorfb,
     borderRadius: 8,
     color: Colors.white // Change the background color for selected text
+  },
+  bottomDialog: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    width: '100%',
+  },
+  dialogContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   container: {
     flex: 1,

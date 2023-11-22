@@ -24,11 +24,11 @@ const Dialog: React.FC<DialogProps> = ({ visible, title, content, onClose }) => 
                         <Image source={require('../assets/images/close_btn.png')} style={{ alignSelf: 'flex-end', width: 16, height: 16, resizeMode: 'contain' }} />
 
                     </Pressable>
-                    <Image source={require('../assets/images/offer_success.png')} style={{ alignSelf: 'center', width: '40%', height: '40%', resizeMode: 'contain' }} />
+                    <Image source={(title === StringKey.error?require('../assets/images/error_icon.png'):require('../assets/images/offer_success.png'))} style={{ alignSelf: 'center', width: '40%', height: '40%', resizeMode: 'contain' }} />
                     <Text style={[StyleView.t1, { textAlign: 'center' }]}>{title}</Text>
                     <Text style={[StyleView.t2, { textAlign: 'center', marginTop: 10 ,fontSize:14}]}>{content}</Text>
 
-                    <CustomButton text={StringKey.back_home} textTheme={[StyleView.b1,]} btnTheme={[StyleView.B1, { marginTop: 20, }]} btnClick={onClose } ></CustomButton>
+                    <CustomButton text={StringKey.Back} textTheme={[StyleView.b1,]} btnTheme={[StyleView.B1, { marginTop: 20, }]} btnClick={onClose } ></CustomButton>
                 
                 </View>
             </View>

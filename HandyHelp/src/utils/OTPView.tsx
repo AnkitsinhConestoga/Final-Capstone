@@ -3,9 +3,13 @@ import {useState, useRef} from 'react';
 import {TextInput, View} from 'react-native';
 import StyleView from './StylesView';
 
-const OTPView: React.FC = () => {
-  const [otp, setOTP] = useState(['', '', '', '', '']);
-  const inputs = Array(5)
+interface OTPViewProps {
+  onOTPChange: (otp: string) => void;
+}
+
+const OTPView: React.FC<OTPViewProps> = ({ onOTPChange }) => {
+  const [otp, setOTP] = useState(['', '', '', '', '','']);
+  const inputs = Array(6)
     .fill(0)
     .map((_, index) => useRef<TextInput>(null));
 
@@ -14,9 +18,11 @@ const OTPView: React.FC = () => {
     newOTP[index] = text;
     setOTP(newOTP);
 
-    if (text !== '' && index < 4) {
+    if (text !== '' && index < 5) {
       inputs[index + 1].current?.focus();
     }
+    const otpString = newOTP.join('');
+    onOTPChange(otpString);
   };
 
   return (

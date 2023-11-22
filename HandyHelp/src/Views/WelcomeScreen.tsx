@@ -11,12 +11,23 @@ import Colors from '../utils/Colors';
 import StringKey from '../utils/StringsFile';
 import StyleView from '../utils/StylesView';
 import CustomButton from './CustomButton';
+import { useFocusEffect } from '@react-navigation/native';
+import FirebaseAuthManager from '../utils/FirebaseAuthManager';
 
 type MyComponentProps = {
   navigation: any;
 };
 
 const WelcomeScreen: React.FC<MyComponentProps> = ({navigation}) => {
+
+
+  useFocusEffect(()=>{
+    if(FirebaseAuthManager.getCurrentUser()){
+      navigation.navigate("HomeScreen");
+    }
+  }
+  );
+
   return (
     <View style={StyleView.container}>
       <StatusBar backgroundColor={'#ffffff'} barStyle={'dark-content'} />

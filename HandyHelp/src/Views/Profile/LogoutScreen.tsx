@@ -6,6 +6,8 @@ import { Image, TextInput, View } from "react-native";
 import BackView from "../BackButtonView";
 import Colors from "../../utils/Colors";
 import CustomButton from "../CustomButton";
+import { USER } from "../../Model/UserModel";
+import FirebaseAuthManager from "../../utils/FirebaseAuthManager";
 
 type LogoutProps = {
     navigation: any
@@ -34,10 +36,18 @@ const LogoutScreen: React.FC<LogoutProps> = ({ navigation }) => {
                 />
             </View>
             <View style={[StyleView.greyBorder, { marginTop: '5%' }]}>
-                    <TextInput style={StyleView.placeHolderStyle} editable={false} placeholderTextColor={Colors.greyd0} placeholder={StringKey.email} ></TextInput>
+                    <TextInput style={StyleView.placeHolderStyle} editable={false} placeholderTextColor={Colors.greyd0} placeholder={StringKey.email} >{USER.email}</TextInput>
                 </View>
 
-                <CustomButton text={StringKey.logout} textTheme={StyleView.b2} btnTheme={[StyleView.B2, { marginTop: 20 ,marginBottom:10}]} btnClick={() => { }} ></CustomButton>
+                <CustomButton text={StringKey.logout} textTheme={StyleView.b2} btnTheme={[StyleView.B2, { marginTop: 20 ,marginBottom:10}]} btnClick={() => { 
+                    FirebaseAuthManager.signOut().then(()=>{
+                        USER.resetUser();
+                        navigation.replace('WelcomeScreen');
+
+                    }).catch(error=>{
+                        console.log("Log out error is ",error);
+                    });
+                }} ></CustomButton>
                 
 
         </SafeAreaView>

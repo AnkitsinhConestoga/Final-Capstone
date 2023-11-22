@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "804316780786",
+    "firebase_url": "https://handyhelp-2c875-default-rtdb.firebaseio.com",
+    "project_id": "handyhelp-2c875",
+    "storage_bucket": "handyhelp-2c875.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804316780786:android:022b7d01827cb5964fd86b",
+        "android_client_info": {
+          "package_name": "com.handyhelp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804316780786-a8q884chndrs9v9ncqq7fjmuqj3p9gm2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.handyhelp",
+            "certificate_hash": "e91efab6c33a18d87bbbea60f3114034a558c516"
+          }
+        },
+        {
+          "client_id": "804316780786-fdt5f8hgek1tgm71jcv8c820rfg192fg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfINVUalfDBx7UpQX-hjp5CJUhx6oc0BQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804316780786-fdt5f8hgek1tgm71jcv8c820rfg192fg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

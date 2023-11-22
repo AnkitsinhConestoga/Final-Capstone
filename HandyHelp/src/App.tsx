@@ -5,8 +5,9 @@
  * @format
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
+  ActivityIndicator,
   Image,
   SafeAreaView,
   ScrollView,
@@ -37,22 +38,71 @@ import PwdChange from './Views/Profile/PasswordChange';
 import LogoutScreen from './Views/Profile/LogoutScreen';
 import ComplainScreen from './Views/ComplainScreen';
 import ContactUsScreen from './Views/ContactusScreen';
+import FirebaseAuthManager from './utils/FirebaseAuthManager';
+import { USER } from './Model/UserModel';
+import FirebaseDatabaseManager from './utils/FirebaseDatabaseManager';
+import Colors from './utils/Colors';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+
 
 
 const Stack = createStackNavigator();
 
 
 const App = () => {
+
+  const [user, setUser] = useState(null); // State to hold the user object
+  const [isLoading, setLoading] = useState(true);
+  GoogleSignin.configure({
+    scopes:['https://www.googleapis.com/auth/user.gender.read']
+  });
+
+
+
+  useEffect(() => {
+    
+    // Listen for changes in user authentication state
+    const unsubscribe = FirebaseAuthManager.onAuthStateChanged(async (user) => {
+
+      if (user) {
+        await FirebaseDatabaseManager.getUserData(user.uid);
+
+
+        setUser(user);
+      } // Update the user state
+      setLoading(false);
+    });
+
+    // Unsubscribe when the component unmounts
+    return () => unsubscribe();
+  }, []);
+
+  if (isLoading) {
+    // Render a loading indicator or splash screen while the app is initializing
+    return (
+      <View style={StyleView.preloader}>
+        <ActivityIndicator size="large" color={Colors.colorfb} />
+      </View>
+    );
+  }
+
+  let intialScreenName = (user) ? ((USER.profileUrl) ? "HomeScreen" : "ProfileReg") : 'WelcomeScreen';
+  console.log("screen name ", intialScreenName);
   return (
     <NavigationContainer><View style={styles.container}>
-    <Stack.Navigator initialRouteName='WelcomeScreen' screenOptions={{
-            headerShown: false
-          }}>
+      <Stack.Navigator initialRouteName={intialScreenName} screenOptions={{
+        headerShown: false
+
+      }}>
         <Stack.Screen
           name="WelcomeScreen"
           component={WelcomeScreen}
-          
-          
+
+
         />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
@@ -69,15 +119,15 @@ const App = () => {
         <Stack.Screen name="LogoutScreen" component={LogoutScreen} />
         <Stack.Screen name="ComplainScreen" component={ComplainScreen} />
         <Stack.Screen name="ContactUsScreen" component={ContactUsScreen} />
-        
+
       </Stack.Navigator>
-  </View></NavigationContainer>
-    
+    </View></NavigationContainer>
+
   );
 };
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
     backgroundColor: '#000',
   }

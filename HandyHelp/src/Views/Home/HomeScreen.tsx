@@ -26,7 +26,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 
     return (
         <View style={StyleView.container}>
-            <Tab.Navigator screenOptions={{
+            <Tab.Navigator initialRouteName={StringKey.home} screenOptions={{
                 tabBarStyle: { position: 'relative' },
                 headerTitleStyle:StyleView.tabHeaderStyle,
                 tabBarActiveTintColor: Colors.colorfb,
