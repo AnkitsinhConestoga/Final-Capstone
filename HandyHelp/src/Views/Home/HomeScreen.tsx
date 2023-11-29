@@ -10,7 +10,6 @@ import CreatePostListingScreen from "./CreatePostScreen";
 import ChatScreen from "./ChatScreen";
 import SettingScreen from "./SettingScreen";
 import Colors from "../../utils/Colors";
-import { Icon } from "react-native-vector-icons/Icon";
 
 
 

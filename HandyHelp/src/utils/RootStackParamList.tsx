@@ -1,5 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
+import PostModel from '../Model/PostModel';
 
 // Define the navigation parameters
 export type RootStackParamList = {
@@ -12,5 +13,8 @@ export type RootStackParamList = {
     ZoomableImages:{
         dataList: string[],
         currentIndex: number
+    },
+    PostDetails:{
+        item:PostModel;
     }
 };

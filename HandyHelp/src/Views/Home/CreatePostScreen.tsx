@@ -14,6 +14,8 @@ import FirebaseStorageManager from "../../utils/FirebaseStorageManager";
 import FirebaseDatabaseManager from "../../utils/FirebaseDatabaseManager";
 import PostModel from "../../Model/PostModel";
 import { USER } from "../../Model/UserModel";
+import { geohashForLocation } from "geofire-common";
+import { Status } from "../../utils/Utils";
 
 
 
@@ -32,6 +34,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
     const [postTitle, setPostTitle] = useState('');
     const [postPrice, setPostPrice] = useState('');
     const [postDesc, setPostDesc] = useState('');
+    const [workHour,setWorkhour] = useState('');
     const [errorMessage, seterrorMessage] = React.useState('');
     const [dialogTitle, setdialogTitle] = React.useState('');
 
@@ -66,7 +69,8 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
     };
 
     const removeImage = (index: number) => {
-        const updatedImages = [...selectedImage];
+        const updatedImages : string[] = [];
+        updatedImages.push(...selectedImage);
         updatedImages.splice(index, 1);
         setSelectedImage(updatedImages);
     };
@@ -89,10 +93,11 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                 console.log('ImagePickerError: ', res.errorMessage)
             } else {
                 console.log("image", res);
-                let imageUri = res.assets?.[0]?.uri;
+                const imageUri :string = res.assets?.[0]?.uri!;
                 if (imageUri) {
-                    setSelectedImage([...selectedImage, imageUri]);
-
+                    // selectedImage.push(imageUri);
+                    setSelectedImage(prevImages => [...prevImages, imageUri]);
+                    console.log("total images ",selectedImage.length);
                 }
             }
         });
@@ -114,9 +119,11 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                 console.log('ImagePickerError: ', res.errorMessage)
             } else {
                 console.log("image", res);
-                let imageUri = res.assets?.[0]?.uri;
+                const imageUri :string = res.assets?.[0]?.uri!;
                 if (imageUri) {
-                    setSelectedImage([...selectedImage, imageUri]);
+                    // selectedImage.push(imageUri);
+                    setSelectedImage(prevImages => [...prevImages, imageUri]);
+                    console.log("total images ",selectedImage.length);
                 }
             }
         });
@@ -163,6 +170,15 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
             return;
         }
 
+        if (!workHour|| parseInt(workHour)<=0) {
+            seterrorMessage(StringKey.error_po_work);
+            setdialogTitle(StringKey.error);
+            openDialog();
+            return;
+        }
+
+
+
 
         if (!results) {
             seterrorMessage(StringKey.error_location);
@@ -174,7 +190,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
         setIsLoadingVisible(true);
 
         const PostId = FirebaseDatabaseManager.generateId();
-        console.log("post id is ", PostId);
+        console.log("post id is ", PostId,isLoadingVisible);
         if (PostId) {
             const ImageUrls: string[] = await FirebaseStorageManager.savePostMedia(selectedImage, PostId);
             if (ImageUrls.length > 0) {
@@ -186,13 +202,21 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                     postLat: results.coordinate.latitude,
                     postLong: results.coordinate.longitude,
                     postStreet: results.address?.streetName!,
+                    postCity: results.address?.city!,
                     postPostal: results.address?.zipCode!,
-                    createdDate: new Date(),
+                    createdDate: new Date().toISOString(),
                     postImages: ImageUrls,
                     postId: PostId,
+                    workDistance: 0,
                     authorId: USER.userId,
-                    isForVerified: isChecked
+                    isForVerified: isChecked,
+                    workDuration: parseInt(workHour),
+                    postStatus: Status.Published,
+                    geohash: geohashForLocation([results.coordinate.latitude, results.coordinate.longitude]),
+                    scheduleData: new Date().toISOString(),
+                    workerId: ""
                 };
+                console.log("post data ",myPost);
 
                 await FirebaseDatabaseManager.savePostData(PostId, myPost).then(() => {
                     setIsLoadingVisible(false);
@@ -234,7 +258,8 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
         setPostTitle('');
         setPostDesc('');
         setPostPrice('');
-       
+    
+        setWorkhour('');
         setSelectedImage([]);
         
         
@@ -257,6 +282,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                         : null
                 }
                 {
+
 
                     (selectedImage.length > 0) ? <FlatList style={{ width: '100%', height: '35%', marginTop: 10 }} horizontal={true} data={selectedImage} keyExtractor={(item, index) => index.toString()} renderItem={({ item, index }) =>
                         <View style={{
@@ -289,6 +315,10 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                         placeholderTextColor={Colors.greyd0}
                         value={postPrice}
                         onChangeText={(text) => {
+                            if(!text){
+                                setPostPrice('');
+                            }else{
+                            
                             const sanitizedText = text.replace(/[^0-9.]/g, '');
                             const parts = sanitizedText.split('.');
 
@@ -296,10 +326,11 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                                 parts[1] = parts[1].slice(0, 2);
                             }
 
-                            const formattedText = parts.join('.'); if (/^\d+(\.\d*)?$/.test(formattedText)) {
+                            const formattedText = parts.join('.'); 
+                            if (/^\d+(\.\d*)?$/.test(formattedText)) {
                                 setPostPrice(formattedText);
                             }
-                        }}
+                        }}}
                         keyboardType="numeric"
                         placeholder={StringKey.Price}
                     />
@@ -314,6 +345,19 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                         placeholder={StringKey.description}
                     />
                 </View>
+                <View style={[StyleView.greyBorder, { marginTop: '5%' }]}>
+                    <TextInput
+                        
+                        
+                        style={[StyleView.placeHolderStyle, { textAlignVertical: 'top' }]}
+                        placeholderTextColor={Colors.greyd0}
+                        value={workHour}
+                        onChangeText={(value)=>{setWorkhour(value.replace(/[- #*;,.<>\{\}\[\]\\\/]/gi, '') )}}
+                        keyboardType="numeric"
+                        placeholder={StringKey.enter_work_hour}
+                    />
+                </View>
+                
                 <Text style={[StyleView.t4, { alignSelf: 'flex-start', marginStart: 10, marginTop: 15 }]}>{StringKey.location}</Text>
                 <View style={[StyleView.rowContainer, { marginStart: 10 }]}>
                     <Text>{results ? results.address?.zipCode : "Select a location"}</Text>
