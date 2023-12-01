@@ -16,5 +16,12 @@ export type RootStackParamList = {
     },
     PostDetails:{
         item:PostModel;
-    }
+    },
+    ChatDetails: {
+        chatId: string;
+        recipientId: string;
+        recipientName: string;
+        recipientProfileImage: string;
+        postModel:PostModel;
+      }
 };

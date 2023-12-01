@@ -8,6 +8,7 @@ import PostDetailItemView from "../../utils/PostDetailItem";
 import FirebaseDatabaseManager from "../../utils/FirebaseDatabaseManager";
 import { USER } from "../../Model/UserModel";
 import PostModel from "../../Model/PostModel";
+import { Status } from "../../utils/Utils";
 
 
 
@@ -107,9 +108,23 @@ const MyPostListingScreen: React.FC<MyPostListingScreenProps> = ({ navigation })
                     (data.length<=0)?
                     <Text style={[StyleView.b8, { marginStart: 10 ,textAlign:'center',textAlignVertical:'center',height:'100%',flex:1}]}>No Activity </Text>
                     :<FlatList data={data} renderItem={({ item }) => <PostDetailItemView item={item} onPostClick={() => {
-                        navigation.navigate('PostOfferScreen');
+                        if(item.postStatus==Status.Canceled){
+
+                        }else if(item.postStatus==Status.Published){
+                            navigation.navigate('PostDetailScreen',{item});
+                        }else if(item.postStatus== Status.Approved){
+                            navigation.navigate('PostDetailScreen', { item });
+                        }else if(item.postStatus ==  Status.Completed){
+                            navigation.navigate('PostDetailScreen', { item });
+                        }
+                        
     
-                    }} postType={selectedText} onPostActionClick={() => { }} ></PostDetailItemView>}>
+                    }} postType={selectedText} onPostActionClick={() => { 
+                        if(item.postStatus == Status.Published){
+                            item.postStatus = Status.Canceled;
+                            FirebaseDatabaseManager.updateStatusPostData(item.postId,item).then(()=>{handleTextSelection(selectedText);});
+                        }
+                        console.log("clicked on item",item.postStatus)}} ></PostDetailItemView>}>
     
                     </FlatList>
                 }

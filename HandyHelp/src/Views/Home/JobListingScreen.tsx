@@ -11,9 +11,8 @@ import FirebaseDatabaseManager from "../../utils/FirebaseDatabaseManager";
 import { USER } from "../../Model/UserModel";
 import DatePicker from "react-native-date-picker";
 import PostModel from "../../Model/PostModel";
-import { Status } from "../../utils/Utils";
-
-
+import { Status, generateChatId } from "../../utils/Utils";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 type JobListingScreenProps = {
@@ -50,6 +49,30 @@ const JobListingScreen: React.FC<JobListingScreenProps> = ({ navigation }) => {
         });
     }
 
+    useFocusEffect(
+        React.useCallback(() => {
+          // Your onResume logic goes here
+          console.log('Screen has come into focus (onResume)');
+          const fetchData = async () => {
+            console.log('Screen has come into focus (onResume)');
+            if (results) {
+              await getCityData(results.coordinate.latitude!, results?.coordinate.longitude!);
+            }
+            // Fetch data, update state, or perform any actions needed on resume
+          };
+    
+          fetchData();
+          // Fetch data, update state, or perform any actions needed on resume
+    
+          // Cleanup function (optional) - will be called when the component unmounts or loses focus
+          return () => {
+            // Your onPause logic goes here
+            console.log('Screen is losing focus (onPause)');
+            // Cleanup actions if needed
+          };
+        }, [results])
+      );
+
     function updateItem(){
         console.log("TAGS",selectedItem);
         if(selectedItem){
@@ -68,6 +91,24 @@ const JobListingScreen: React.FC<JobListingScreenProps> = ({ navigation }) => {
         setOpen(true);
         setSelectedItem(item);
         console.log("TAGS",selectedItem);
+        
+
+    }
+
+    function OpenChatDialog(item : PostModel){
+
+        FirebaseDatabaseManager.getanotherUserData(item.authorId).then((user)=>{
+           
+            navigation.navigate('ChatDetails', {
+                recipientId:user.userId,
+                chatId:generateChatId(user.userId,USER.userId,item.postId),
+                recipientName:user.name,
+                recipientProfileImage:user.profileUrl,
+                postModel:item
+              });
+        });
+
+        
         
 
     }
@@ -99,6 +140,8 @@ const JobListingScreen: React.FC<JobListingScreenProps> = ({ navigation }) => {
                             showTimeDialog(item);
 
                         }} onNegotiateClick={()=>{
+
+                            OpenChatDialog(item);
                            
                         }}></PostItemView>}>
 

@@ -217,7 +217,6 @@ const StyleView = StyleSheet.create({
   b2: {
     color: Colors.colorf5,
     fontSize: 16,
-
     fontFamily: 'Poppins-Medium',
     fontWeight: '500',
     justifyContent: 'center',
@@ -276,6 +275,9 @@ const StyleView = StyleSheet.create({
     color: Colors.addressColor,
     textAlign: "center",
 
+  },
+  chatProfile:{
+    width: 50, height: 50, borderRadius: 25
   },
   preloader: {
     left: 0,

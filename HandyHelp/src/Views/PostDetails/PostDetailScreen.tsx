@@ -11,10 +11,14 @@ import { Int32 } from "react-native/Libraries/Types/CodegenTypes";
 import Colors from "../../utils/Colors";
 import CustomButton from "../CustomButton";
 import PostModel from "../../Model/PostModel";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 import { RootStackParamList } from "../../utils/RootStackParamList";
 import { PlacePickerPresentationStyle } from "react-native-place-picker";
 import MapView, { Marker } from "react-native-maps";
+import DatePicker from "react-native-date-picker";
+import { Status, formatCustomDate, generateChatId } from "../../utils/Utils";
+import { USER } from "../../Model/UserModel";
+import FirebaseDatabaseManager from "../../utils/FirebaseDatabaseManager";
 
 type ScreenBRouteProp = RouteProp<RootStackParamList, 'PostDetails'>;
 
@@ -32,6 +36,12 @@ const PostDetailScreen: React.FC<PostDetailProp> = ({ route, navigation }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [distance, setDistance] = useState('');
     const [distanceTime, setDistanceTime] = useState('');
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 1);
+    const [date, setDate] = useState(currentDate)
+    const [open, setOpen] = useState(false);
+    const [workerUser, setWorkerUser] = useState(USER);
+    const [workerSet, setWorker] = useState(false);
 
     useEffect(() => {
 
@@ -49,6 +59,58 @@ const PostDetailScreen: React.FC<PostDetailProp> = ({ route, navigation }) => {
         setDistanceTime(`${formattedTime} min`);
     }, []);
 
+    useFocusEffect(
+        React.useCallback(() => {
+
+            const fetchData = async () => {
+                console.log('Screen has come into focus (onResume)');
+                if (postModel.postStatus == Status.Approved || postModel.postStatus == Status.Completed) {
+                    if (postModel.authorId == USER.userId) {
+                        await FirebaseDatabaseManager.getanotherUserData(postModel.workerId).then((item) => {
+                            if (item) {
+                                console.log("fetched user", item);
+                                setWorkerUser(item);
+                            }
+                        });
+                    } else {
+                        await FirebaseDatabaseManager.getanotherUserData(postModel.authorId).then((item) => {
+                            if (item) {
+                                console.log("fetched user", item);
+                                setWorkerUser(item);
+                            }
+                        });
+                    }
+                }
+            };
+            if (!workerSet) {
+                fetchData();
+
+            }
+
+
+
+
+            return () => {
+                console.log('Screen is losing focus (onPause)');
+
+            };
+        }, [workerSet])
+    );
+
+    function updateItem() {
+        console.log("TAGS", postModel);
+        if (postModel) {
+            postModel.scheduleData = date.toISOString();
+            postModel.postStatus = Status.Approved;
+            postModel.workerId = USER.userId;
+            FirebaseDatabaseManager.updateStatusPostData(postModel.postId, postModel).then(() => {
+                navigation.goBack();
+            }).catch((error) => {
+                console.log("Error while update post details");
+            })
+        }
+    }
+
 
 
     // Construct the result string
@@ -59,6 +121,14 @@ const PostDetailScreen: React.FC<PostDetailProp> = ({ route, navigation }) => {
             setCurrentIndex(currentIndex + 1);
         }
     };
+
+    function showTimeDialog() {
+        setOpen(true);
+
+
+
+
+    }
 
     const handlePrevious = () => {
         if (currentIndex > 0) {
@@ -138,28 +208,59 @@ const PostDetailScreen: React.FC<PostDetailProp> = ({ route, navigation }) => {
 
                     <Text style={[StyleView.t4, { alignSelf: 'flex-start', marginStart: 10, marginTop: 15 }]}>{StringKey.location}</Text>
                     <MapView
-                    initialRegion={{
-                        latitude: postModel.postLat,
-                        longitude: postModel.postLong,
-                        latitudeDelta: 0.0155,
-                        longitudeDelta: 0.0295,
-                      }}
-                    zoomControlEnabled={false}
-                    scrollEnabled={false}
-                    style={{width:'100%',minHeight:180}}
+                        initialRegion={{
+                            latitude: postModel.postLat,
+                            longitude: postModel.postLong,
+                            latitudeDelta: 0.0155,
+                            longitudeDelta: 0.0295,
+                        }}
+                        zoomControlEnabled={false}
+                        scrollEnabled={false}
+                        style={{ width: '100%', minHeight: 180 }}
                         mapType="standard" // Set the map type (standard, satellite, hybrid)
-                        
-                        
+
+
                     >
-                        <Marker coordinate={{latitude:postModel.postLat,longitude:postModel.postLong}}/>
+                        <Marker coordinate={{ latitude: postModel.postLat, longitude: postModel.postLong }} />
                     </MapView>
+
+                    {
+                        (postModel.postStatus == Status.Approved || postModel.postStatus == Status.Completed) ?
+                            <View>
+                                <Text style={[StyleView.t4, { alignSelf: 'flex-start', marginStart: 10, marginTop: 15 }]}>{StringKey.schedule_time}</Text>
+                                <Text style={[StyleView.b2, { marginStart: 10, color: Colors.textColor41 }]}>{formatCustomDate(postModel.scheduleData)}</Text>
+
+                                <Text style={[StyleView.t4, { alignSelf: 'flex-start', marginStart: 10, marginTop: 15 }]}>{StringKey.contact_info}</Text>
+                                <View style={[StyleView.rowContainer, { marginStart: 10, marginTop: 15 }]}>
+                                    <Image
+                                        source={
+                                            workerUser.profileUrl ? { uri: workerUser.profileUrl } :
+                                                require('../../assets/images/default-profile-image.png')
+                                        } // Provide a default profile image
+                                        style={[StyleView.profileImage, { width: 75, height: 75, }]}
+                                    />
+
+                                    <View style={{ marginStart: 15 }}>
+                                        <Text style={[StyleView.t4, { alignSelf: 'flex-start', }]}>{workerUser.name}</Text>
+                                        <Text style={[StyleView.t2, { alignSelf: 'flex-start', }]}>{workerUser.email}</Text>
+                                        <Text style={[StyleView.t2, { alignSelf: 'flex-start', }]}>{"+"+workerUser.callingCode + " " + workerUser.phone}</Text>
+                                    </View>
+
+                                </View>
+                            </View> : null}
+
+
+
+
 
                 </View>
             </ScrollView>
             <View style={{ flex: 1 }} />
-            <View style={StyleView.rowContainer}>
+            {
+                (postModel.postStatus == Status.Approved)?
+                <View style={StyleView.rowContainer}>
                 <CustomButton
-                    text={StringKey.negotiate}
+                    text={StringKey.Back}
                     textTheme={StyleView.b2}
                     btnTheme={[StyleView.B2, { flex: 1, margin: 8 }]}
                     btnClick={() => {
@@ -168,14 +269,66 @@ const PostDetailScreen: React.FC<PostDetailProp> = ({ route, navigation }) => {
                 />
 
                 <CustomButton
+                    text={StringKey.completed}
+                    textTheme={StyleView.b1}
+                    btnTheme={[StyleView.B1, { flex: 1, margin: 8 }]}
+                    btnClick={() => {
+                        postModel.postStatus=Status.Completed;
+                        FirebaseDatabaseManager.updateStatusPostData(postModel.postId,postModel).then(()=>{
+                            navigation.goBack();
+                        }).catch((error)=>{
+                            console.log("Error while update post details");
+                        })
+
+                    }}
+                />
+            </View>:(postModel.postStatus==Status.Completed)?<View>
+                <Text style={[StyleView.t1,{marginTop:10,color:Colors.colorfb,textAlign:'center'}]}>{StringKey.completed}</Text>
+            </View>:(postModel.postStatus==Status.Published && postModel.authorId==USER.userId)?null:<View style={StyleView.rowContainer}>
+                <CustomButton
+                    text={StringKey.negotiate}
+                    textTheme={StyleView.b2}
+                    btnTheme={[StyleView.B2, { flex: 1, margin: 8 }]}
+                    btnClick={() => {
+                        FirebaseDatabaseManager.getanotherUserData(postModel.authorId).then((user)=>{
+           
+                            navigation.navigate('ChatDetails', {
+                                recipientId:user.userId,
+                                chatId:generateChatId(user.userId,USER.userId,postModel.postId),
+                                recipientName:user.name,
+                                recipientProfileImage:user.profileUrl,
+                                postModel:postModel
+                              });
+                        });
+                    }}
+                />
+
+                <CustomButton
                     text={StringKey.accept}
                     textTheme={StyleView.b1}
                     btnTheme={[StyleView.B1, { flex: 1, margin: 8 }]}
                     btnClick={() => {
-                        navigation.navigate('HomeScreen');
+                        setOpen(true);
                     }}
                 />
             </View>
+
+            }
+            
+            <DatePicker
+                modal
+                open={open}
+                minimumDate={currentDate}
+                date={date}
+                onConfirm={(date) => {
+                    setOpen(false)
+                    setDate(date)
+                    updateItem();
+                }}
+                onCancel={() => {
+                    setOpen(false)
+                }}
+            />
 
 
         </SafeAreaView>);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StatusBar, Image, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, StatusBar, Image, Text, SafeAreaView, TouchableOpacity, ActivityIndicator } from "react-native";
 import StyleView from "../../utils/StylesView";
 import CustomButton from "../CustomButton";
 import StringKey from '../../utils/StringsFile';
@@ -8,6 +8,7 @@ import Colors from "../../utils/Colors";
 import { USER } from "../../Model/UserModel";
 import FirebaseAuthManager from "../../utils/FirebaseAuthManager";
 import FirebaseDatabaseManager from "../../utils/FirebaseDatabaseManager";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 
@@ -16,21 +17,28 @@ type SettingScreenProps = {
 };
 
 const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
+    const [firebaseExecutionFinished, setFirebaseExecutionFinished] = useState(false);
 
-
-    useEffect(() => {
-        // Listen for changes in user authentication state
-        const unsubscribe = FirebaseAuthManager.onAuthStateChanged(async (user) => {
+    useFocusEffect(
+        React.useCallback(() => {
+          // Your code to update the view goes here
+          FirebaseAuthManager.onAuthStateChanged(async (user) => {
     
-          if (user) {
-            await FirebaseDatabaseManager.getUserData(user.uid);
-          } 
-        });
-    
-        // Unsubscribe when the component unmounts
-        return () => unsubscribe();
-      }, []);
+            if (user) {
+                console.log("user update");
+              await FirebaseDatabaseManager.getUserData(user.uid).then(()=>{
+                console.log("data updated");
+                  setFirebaseExecutionFinished(true);
+              });
+            } 
+          });
+        }, [])
+      );
+   
 
+
+     
+   
 
     const [profileImage, setProfileImage] = useState(USER.profileUrl||null);
     const selectImage = () => {
@@ -43,8 +51,13 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
             },
         };
     };
+    console.log("user verified",USER.isVerified);
     return (
         <SafeAreaView style={StyleView.container}>
+            {
+                !firebaseExecutionFinished?<View style={StyleView.preloader}>
+                <ActivityIndicator size="large" color={Colors.colorfb} />
+            </View>:
             <ScrollView>
 
 
@@ -59,7 +72,10 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
                         />
                     </TouchableOpacity>
                 </View>
-                <Text style={[StyleView.t1, { textAlign: 'center', marginTop: 10 }]}>{USER.name}</Text>
+                <View style={[StyleView.rowContainer,{alignItems:'center',alignSelf:'center', marginTop: 10 }]}>
+                    <Text style={[StyleView.t1, { textAlign: 'center',}]}>{USER.name}</Text>
+                    {(USER.isVerified)?<Image style={{height:15,width:15,marginStart:5}} source={require('../../assets/images/checked_circle.png')}/>:null}
+                </View>
                 <Text style={[StyleView.t1, { textAlign: 'center', fontSize: 14, marginTop: 5 }]}>{USER.email}</Text>
                 <TouchableOpacity onPress={()=>{
                     navigation.navigate('UpdateProfile');
@@ -69,10 +85,16 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
                     <Text style={[StyleView.t4,{marginStart:10,color:Colors.textColor41}]}>{StringKey.update_profile}</Text>
                 </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{}}>
+                <TouchableOpacity onPress={()=>{navigation.navigate('ProfessionalDirectory');}}>
                 <View style={[StyleView.rowContainer,StyleView.circularborderStyle,{padding:8,marginStart:'5%',marginEnd:'5%',marginBottom:10}]}>
                     <Image style={{width:16,height:16,resizeMode:'contain'}} source={require('../../assets/images/directory.png')}/>
                     <Text style={[StyleView.t4,{marginStart:10,color:Colors.textColor41}]}>{StringKey.prof_directory}</Text>
+                </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{ navigation.navigate('AccountVerify');}}>
+                <View style={[StyleView.rowContainer,StyleView.circularborderStyle,{padding:8,marginStart:'5%',marginEnd:'5%',marginBottom:10}]}>
+                    <Image style={{width:16,height:16,resizeMode:'contain'}} source={require('../../assets/images/acc_verify.png')}/>
+                    <Text style={[StyleView.t4,{marginStart:10,color:Colors.textColor41}]}>{StringKey.acc_verify}</Text>
                 </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>{
@@ -139,8 +161,7 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
                     <Text style={[StyleView.t4,{marginStart:10,color:Colors.textColor41}]}>{StringKey.logout}</Text>
                 </View>
                 </TouchableOpacity>
-
-            </ScrollView>
+            </ScrollView>}
         </SafeAreaView>
     );
 };

@@ -14,7 +14,7 @@ type LogoutProps = {
 };
 
 const LogoutScreen: React.FC<LogoutProps> = ({ navigation }) => {
-    const [profileImage, setProfileImage] = useState(null);
+   
     return (
         <SafeAreaView style={StyleView.container}>
             <BackView
@@ -28,8 +28,8 @@ const LogoutScreen: React.FC<LogoutProps> = ({ navigation }) => {
             <View style={{ alignItems: 'center', marginTop: '10%' }}>
 
                 <Image
-                    source={
-                        profileImage ||
+                     source={
+                        USER.profileUrl ? {uri:USER.profileUrl}: 
                         require('../../assets/images/default-profile-image.png')
                     } // Provide a default profile image
                     style={StyleView.profileImage}

@@ -39,6 +39,36 @@ class FirebaseStorageManager {
 
     }
 
+    async saveVeriDocument(mediaUrl: string[], postId: string): Promise<string[]> {
+        const uploadedUrls: string[] = [];
+        try {
+            await Promise.all(mediaUrl.map(async (mediaLink, index) => {
+                const filename =  mediaLink.substring(mediaLink.lastIndexOf('/') + 1);
+                const uploadUri = Platform.OS === 'ios' ? mediaLink.replace('file://', '') : mediaLink;
+
+                try {
+                    const snapshot =  storage().ref(`verification/${postId}/${filename}`);
+                    await snapshot.putFile(uploadUri);
+                    const url = await snapshot.getDownloadURL();
+
+                    if (url) {
+                        uploadedUrls.push(url);
+                    }
+
+                    console.log('Image URL:', url);
+                } catch (error) {
+                    console.log("Got error while uploading image", error);
+                }
+            }));
+
+            return uploadedUrls;
+        } catch (error) {
+            console.log("Got error while uploading profile_pic", error);
+            return [];
+        }
+
+    }
+
     async saveUserData(profileImage: string, userId: string) {
         const filename = profileImage.substring(profileImage.lastIndexOf('/') + 1);
         const uploadUri = Platform.OS === 'ios' ? profileImage.replace('file://', '') : profileImage;

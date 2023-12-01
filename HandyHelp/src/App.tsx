@@ -47,6 +47,9 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import ChatDetailsScreen from './Views/Chat/ChatDetailsScreen';
+import AccountVerify from './Views/AccountVerify';
+import ProfessionalDirectory from './Views/ProfessionalDirectory';
 
 
 
@@ -118,7 +121,10 @@ const App = () => {
         <Stack.Screen name="UpdatePassword" component={PwdChange} />
         <Stack.Screen name="LogoutScreen" component={LogoutScreen} />
         <Stack.Screen name="ComplainScreen" component={ComplainScreen} />
+        <Stack.Screen name="ProfessionalDirectory" component={ProfessionalDirectory}/>
+        <Stack.Screen name="AccountVerify" component={AccountVerify} />
         <Stack.Screen name="ContactUsScreen" component={ContactUsScreen} />
+        <Stack.Screen name="ChatDetails" component={ChatDetailsScreen} />
 
       </Stack.Navigator>
     </View></NavigationContainer>

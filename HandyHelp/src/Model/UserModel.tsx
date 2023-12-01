@@ -22,6 +22,11 @@ class UserModel {
   private constructor() {
     // Initialize your properties or perform other setup here
   }
+  public  createTemporaryUser(): UserModel {
+    const temporaryUser = new UserModel();
+   
+    return temporaryUser;
+  }
 
   public static getInstance(): UserModel {
     if (!UserModel.instance) {

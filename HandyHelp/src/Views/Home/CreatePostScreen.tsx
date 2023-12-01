@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { View, StatusBar, Image, Text, SafeAreaView, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, StatusBar, Image, Text, SafeAreaView, TextInput, TouchableOpacity, ActivityIndicator, Modal } from "react-native";
 import StyleView from "../../utils/StylesView";
 import CustomButton from "../CustomButton";
 import StringKey from '../../utils/StringsFile';
@@ -34,7 +34,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
     const [postTitle, setPostTitle] = useState('');
     const [postPrice, setPostPrice] = useState('');
     const [postDesc, setPostDesc] = useState('');
-    const [workHour,setWorkhour] = useState('');
+    const [workHour, setWorkhour] = useState('');
     const [errorMessage, seterrorMessage] = React.useState('');
     const [dialogTitle, setdialogTitle] = React.useState('');
 
@@ -54,7 +54,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
     };
     const openDialog = () => {
         console.log("Dialog open");
-        if(isLoadingVisible){
+        if (isLoadingVisible) {
             setIsLoadingVisible(false);
         }
         setIsDialogVisible(true);
@@ -69,7 +69,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
     };
 
     const removeImage = (index: number) => {
-        const updatedImages : string[] = [];
+        const updatedImages: string[] = [];
         updatedImages.push(...selectedImage);
         updatedImages.splice(index, 1);
         setSelectedImage(updatedImages);
@@ -93,11 +93,11 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                 console.log('ImagePickerError: ', res.errorMessage)
             } else {
                 console.log("image", res);
-                const imageUri :string = res.assets?.[0]?.uri!;
+                const imageUri: string = res.assets?.[0]?.uri!;
                 if (imageUri) {
                     // selectedImage.push(imageUri);
                     setSelectedImage(prevImages => [...prevImages, imageUri]);
-                    console.log("total images ",selectedImage.length);
+                    console.log("total images ", selectedImage.length);
                 }
             }
         });
@@ -119,11 +119,11 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                 console.log('ImagePickerError: ', res.errorMessage)
             } else {
                 console.log("image", res);
-                const imageUri :string = res.assets?.[0]?.uri!;
+                const imageUri: string = res.assets?.[0]?.uri!;
                 if (imageUri) {
                     // selectedImage.push(imageUri);
                     setSelectedImage(prevImages => [...prevImages, imageUri]);
-                    console.log("total images ",selectedImage.length);
+                    console.log("total images ", selectedImage.length);
                 }
             }
         });
@@ -170,7 +170,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
             return;
         }
 
-        if (!workHour|| parseInt(workHour)<=0) {
+        if (!workHour || parseInt(workHour) <= 0) {
             seterrorMessage(StringKey.error_po_work);
             setdialogTitle(StringKey.error);
             openDialog();
@@ -190,7 +190,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
         setIsLoadingVisible(true);
 
         const PostId = FirebaseDatabaseManager.generateId();
-        console.log("post id is ", PostId,isLoadingVisible);
+        console.log("post id is ", PostId, isLoadingVisible);
         if (PostId) {
             const ImageUrls: string[] = await FirebaseStorageManager.savePostMedia(selectedImage, PostId);
             if (ImageUrls.length > 0) {
@@ -216,7 +216,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                     scheduleData: new Date().toISOString(),
                     workerId: ""
                 };
-                console.log("post data ",myPost);
+                console.log("post data ", myPost);
 
                 await FirebaseDatabaseManager.savePostData(PostId, myPost).then(() => {
                     setIsLoadingVisible(false);
@@ -225,7 +225,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                     seterrorMessage(StringKey.post_created);
                     resetValue();
                     openDialog();
-                    
+
                 }).catch(error => {
                     setIsLoadingVisible(false);
                     console.log(error);
@@ -239,7 +239,7 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                 setIsLoadingVisible(false);
                 setdialogTitle(StringKey.error);
                 seterrorMessage("error while uploading image");
-                
+
                 openDialog();
             }
         } else {
@@ -251,18 +251,18 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
         }
     }
 
-    const resetValue =()=>{
+    const resetValue = () => {
         setResults(undefined);
         setIsLoadingVisible(false);
         setIsChecked(false);
         setPostTitle('');
         setPostDesc('');
         setPostPrice('');
-    
+
         setWorkhour('');
         setSelectedImage([]);
-        
-        
+
+
     }
 
 
@@ -271,16 +271,21 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
 
     return (
         <SafeAreaView style={StyleView.container}>
+            <Modal visible={isLoadingVisible}>
+                <View style={StyleView.preloader} >
+                    <ActivityIndicator size="large" color={Colors.colorfb} />
+                </View>
+
+            </Modal>
             <ScrollView style={StyleView.container}>
-                {
+
+                {/* {
                     (isLoadingVisible) ?
 
-                        <View style={StyleView.preloader}>
-                            <ActivityIndicator size="large" color={Colors.colorfb} />
-                        </View>
+                        
 
                         : null
-                }
+                } */}
                 {
 
 
@@ -315,22 +320,23 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                         placeholderTextColor={Colors.greyd0}
                         value={postPrice}
                         onChangeText={(text) => {
-                            if(!text){
+                            if (!text) {
                                 setPostPrice('');
-                            }else{
-                            
-                            const sanitizedText = text.replace(/[^0-9.]/g, '');
-                            const parts = sanitizedText.split('.');
+                            } else {
 
-                            if (parts.length > 1) {
-                                parts[1] = parts[1].slice(0, 2);
-                            }
+                                const sanitizedText = text.replace(/[^0-9.]/g, '');
+                                const parts = sanitizedText.split('.');
 
-                            const formattedText = parts.join('.'); 
-                            if (/^\d+(\.\d*)?$/.test(formattedText)) {
-                                setPostPrice(formattedText);
+                                if (parts.length > 1) {
+                                    parts[1] = parts[1].slice(0, 2);
+                                }
+
+                                const formattedText = parts.join('.');
+                                if (/^\d+(\.\d*)?$/.test(formattedText)) {
+                                    setPostPrice(formattedText);
+                                }
                             }
-                        }}}
+                        }}
                         keyboardType="numeric"
                         placeholder={StringKey.Price}
                     />
@@ -347,17 +353,17 @@ const CreatePostListingScreen: React.FC<CreatePostListingScreenProps> = ({ navig
                 </View>
                 <View style={[StyleView.greyBorder, { marginTop: '5%' }]}>
                     <TextInput
-                        
-                        
+
+
                         style={[StyleView.placeHolderStyle, { textAlignVertical: 'top' }]}
                         placeholderTextColor={Colors.greyd0}
                         value={workHour}
-                        onChangeText={(value)=>{setWorkhour(value.replace(/[- #*;,.<>\{\}\[\]\\\/]/gi, '') )}}
+                        onChangeText={(value) => { setWorkhour(value.replace(/[- #*;,.<>\{\}\[\]\\\/]/gi, '')) }}
                         keyboardType="numeric"
                         placeholder={StringKey.enter_work_hour}
                     />
                 </View>
-                
+
                 <Text style={[StyleView.t4, { alignSelf: 'flex-start', marginStart: 10, marginTop: 15 }]}>{StringKey.location}</Text>
                 <View style={[StyleView.rowContainer, { marginStart: 10 }]}>
                     <Text>{results ? results.address?.zipCode : "Select a location"}</Text>
