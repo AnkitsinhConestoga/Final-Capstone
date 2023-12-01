@@ -29,10 +29,11 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
               await FirebaseDatabaseManager.getUserData(user.uid).then(()=>{
                 console.log("data updated");
                   setFirebaseExecutionFinished(true);
+                  setProfileImage(USER.profileUrl);
               });
             } 
           });
-        }, [])
+        }, [USER])
       );
    
 
@@ -91,12 +92,13 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ navigation }) => {
                     <Text style={[StyleView.t4,{marginStart:10,color:Colors.textColor41}]}>{StringKey.prof_directory}</Text>
                 </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{ navigation.navigate('AccountVerify');}}>
+                {USER.isVerified?null:<TouchableOpacity onPress={()=>{ navigation.navigate('AccountVerify');}}>
                 <View style={[StyleView.rowContainer,StyleView.circularborderStyle,{padding:8,marginStart:'5%',marginEnd:'5%',marginBottom:10}]}>
                     <Image style={{width:16,height:16,resizeMode:'contain'}} source={require('../../assets/images/acc_verify.png')}/>
                     <Text style={[StyleView.t4,{marginStart:10,color:Colors.textColor41}]}>{StringKey.acc_verify}</Text>
                 </View>
-                </TouchableOpacity>
+                </TouchableOpacity>}
+                
                 <TouchableOpacity onPress={()=>{
                     navigation.navigate('UpdatePassword');
                 }}> 

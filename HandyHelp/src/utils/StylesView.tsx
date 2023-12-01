@@ -320,6 +320,16 @@ const StyleView = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1
   },
+  elevatedView: {
+   padding:10,
+   borderRadius:10,
+    backgroundColor: "white",
+    elevation: 10, // elevation for Android
+    shadowColor: "#000", // shadow color for iOS
+    shadowOffset: { width: 0, height: 10 }, // shadow offset for iOS
+    shadowOpacity: 0.2, // shadow opacity for iOS
+    shadowRadius: 10, // shadow blur radius for iOS
+  },
   CardStyle: {
     height: 170,
     backgroundColor: Colors.cardBg,
